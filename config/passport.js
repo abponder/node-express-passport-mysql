@@ -8,12 +8,12 @@ var mysql = require('mysql');
 var bcrypt = require('bcrypt-nodejs');
 var dbconfig = require('./database');
 var connection = mysql.createConnection(dbconfig.connection);
-connection.connect();
+// connection.connect();
 connection.query('USE ' + dbconfig.database);
-connection.end();
+// connection.end();
 // expose this function to our app using module.exports
 module.exports = function(passport) {
-
+    
     // =========================================================================
     // passport session setup ==================================================
     // =========================================================================
@@ -27,13 +27,13 @@ module.exports = function(passport) {
 
     // used to deserialize the user
     passport.deserializeUser(function(id, done) {
-        connection.connect();
+        // connection.connect();
         connection.query("SELECT * FROM users WHERE id = ? ",[id], function(err, rows){
             done(err, rows[0]);
         });
-        connection.end();
+        // connection.end();
     });
-
+    
     // =========================================================================
     // LOCAL SIGNUP ============================================================
     // =========================================================================
@@ -51,31 +51,36 @@ module.exports = function(passport) {
         function(req, username, password, done) {
             // find a user whose email is the same as the forms email
             // we are checking to see if the user trying to login already exists
-            connection.connect();
-            connection.query("SELECT * FROM users WHERE username = ?",[username], function(err, rows) {
+            
+            // connection.connect();
+            console.log("username", username);
+            connection.query(`SELECT * FROM users WHERE username = '${username}'`, function(err, rows) {
+                console.log("testing", username, rows, err);
                 if (err)
+                
                     return done(err);
                 if (rows.length) {
                     return done(null, false, req.flash('signupMessage', 'That username is already taken.'));
                 } else {
                     // if there is no user with that username
                     // create the user
+                    
                     var newUserMysql = {
                         username: username,
                         password: bcrypt.hashSync(password, null, null)  // use the generateHash function in our user model
                     };
-
+                    
                     var insertQuery = "INSERT INTO users ( username, password ) values (?,?)";
-                    connection.connect();
+                    // connection.connect();
                     connection.query(insertQuery,[newUserMysql.username, newUserMysql.password],function(err, rows) {
                         newUserMysql.id = rows.insertId;
 
                         return done(null, newUserMysql);
                     });
-                    connection.end();
+                    // connection.end();
                 }
             });
-            connection.end();
+            // connection.end();
         })
     );
 
@@ -109,7 +114,7 @@ module.exports = function(passport) {
                 // all is well, return successful user
                 return done(null, rows[0]);
             });
-            connection.end();
+            // connection.end();
         })
     );
 };

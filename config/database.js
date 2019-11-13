@@ -3,8 +3,15 @@ module.exports = {
     'connection': {
         'host': 'localhost',
         'user': 'root',
-        'password': 'password'
+        'password': 'Blue*redx11963'
     },
-	'database': 'my_schema',
+	'database': 'mtgpassport',
     'users_table': 'users'
 };
+
+// var connection = mysql.createConnection({
+//     host     : 'localhost',
+//     user     : 'root',
+//     password : 'Blue*redx11963',
+//     database : 'simplemtgreact'
+//   });
