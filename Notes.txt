@@ -1,0 +1,12 @@
+11/12/19
+solved error:
+  "Error: Cannot enqueue Handshake after invoking quit.":
+  commented out:
+  // connection.connect();
+// connection.end();
+don't we need at least one connection.end()? 
+https://github.com/mysqljs/mysql#server-disconnects
+
+
+next week:
+copy from old react files into this version
