@@ -225,3 +225,5 @@ pip-log.txt
 node_modules/
 
 .env
+
+./config/database.js
