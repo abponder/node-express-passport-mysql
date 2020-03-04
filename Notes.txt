@@ -1,12 +1,38 @@
-11/12/19
-solved error:
-  "Error: Cannot enqueue Handshake after invoking quit.":
-  commented out:
-  // connection.connect();
-// connection.end();
-don't we need at least one connection.end()? 
-https://github.com/mysqljs/mysql#server-disconnects
+source ref: https://github.com/manjeshpv/node-express-passport-mysql
 
 
-next week:
-copy from old react files into this version
+for 3/10/20
+work signup page ...
+
+==================================================
+make error cases for all scenarios. user, but pw wrong; 
+say unable to verify username or password;
+
+redirect to welcome page when the user is correct
+
+then signup page
+
+===============================================================================================
+02/11/20
+got message to show in terminal!
+from terminal:
+null false [ 'No user found.' ] 'routes: '
+
+also:
+check next time: make sure the success user found option is used; and add routes error function
+
+================================================================================================
+
+02/04/20:
+got correct login to work.
+worked on passport message when an incorrect entry is made.
+getting error: Proxy error: Could not proxy request /api/login from localhost:3000 to http://localhost:80
+
+found this:
+https://www.youtube.com/watch?v=L72fhGm1tfE
+47:30
+
+res.status(400).json({ msg: 'Please include a name and email'});
+return res.status(400).json({ msg: 'No member with id of ${req.params.id}'});
+
+

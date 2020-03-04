@@ -13,9 +13,8 @@ var connection = mysql.createConnection({
     'host': process.env.host,
     'user': process.env.user,
     'password': process.env.password
-
-
 });
+
 // connection.connect();
 //connection.query('USE ' + dbconfig.database);
 connection.query('USE ' + process.env.database);
@@ -62,9 +61,9 @@ module.exports = function(passport) {
             // we are checking to see if the user trying to login already exists
             
             // connection.connect();
-            console.log("username", username);
+           
             connection.query(`SELECT * FROM users WHERE username = '${username}'`, function(err, rows) {
-                console.log("testing", username, rows, err);
+                
                 if (err)
                 
                     return done(err);
@@ -108,22 +107,32 @@ module.exports = function(passport) {
             passReqToCallback : true // allows us to pass back the entire request to the callback
         },
         function(req, username, password, done) { // callback with email and password from our form
-       //     connection.connect();
+            
+        //     connection.connect();
             connection.query("SELECT * FROM users WHERE username = ?",[username], function(err, rows){
                 if (err)
                     return done(err);
                 if (!rows.length) {
-                    return done(null, false, req.flash('loginMessage', 'No user found.')); // req.flash is the way to set flashdata using connect-flash
+                    //return done(null, {});
+                    // res.locals.flash = req.flash('loginMessage');
+                    req.test = 'testing'
+                    // return done(null, false, req.flash('loginMessage', 'No user found.')); // req.flash is the way to set flashdata using connect-flash
+                    req.flash('loginMessage', 'Oops! unable to validate user name or password.')  //set the message
+                    return done (null, false, req.flash('loginMessage')) //get the message
+                    //check next time: make sure the success user found option is used; add routes error function
                 }
 
                 // if the user is found but the password is wrong
-                if (!bcrypt.compareSync(password, rows[0].password))
-                    return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
-
-                // all is well, return successful user
+                if (!bcrypt.compareSync(password, rows[0].password)){
+                    req.flash('loginMessage', 'Oops! unable to validate user name or password.')  //set the message
+                    return done (null, false, req.flash('loginMessage')) //get the message
+                }
+                    
                 return done(null, rows[0]);
             });
             // connection.end();
         })
     );
 };
+
+
