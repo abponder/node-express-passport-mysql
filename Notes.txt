@@ -1,6 +1,21 @@
 source ref: https://github.com/manjeshpv/node-express-passport-mysql
 
+for 4/14/20
+compared the original 
+main thing not working ... req.user becomes undefined ... maybe ejs sends something from browser?
+log req.cookie in orig app .. compared
 
+maybe isauthenticated is not defined in passport lib? ours in returning undefined
+in server.js we are using a very old configuration ... order or part could be updated in passport library
+
+========================================
+for 4/7/20
+maybe lost some cookie functionality that ejs had. start the original project again and log values.
+how to use cookie using js. need to be able to validate the cookie, where using loggedIn middleware.
+
+
+
+====================================================================================================
 for 3/10/20
 work signup page ...
 

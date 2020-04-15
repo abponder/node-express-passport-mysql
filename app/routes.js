@@ -31,15 +31,27 @@ module.exports = function(app, passport) {
 // res.redirect('/');
 // });
 
-app.post('/api/login', function(req, res, next) {
-  passport.authenticate('local-login', function(err, user, info) {
-		res.json({
-			'message': info ? info : "", //if info else send back empty string
-			'user': user
-		})
+// app.post('/api/login', function(req, res, next) {
+//   passport.authenticate('local-login', function(err, user, info) {
+// 		res.json({
+// 			'message': info ? info : "", //if info else send back empty string
+// 			'user': user
+// 		})
 		
 
-  })(req, res, next);
+//   })(req, res, next);
+// });
+
+app.post('/api/login', passport.authenticate('local-login'),
+function(req, res) {
+	console.log("req.user: ", req.user);
+
+	if (req.body.remember) {
+		req.session.cookie.maxAge = 1000 * 60 * 3;
+	} else {
+		req.session.cookie.expires = false;
+	}
+res.send('/');
 });
 
 
@@ -69,24 +81,41 @@ app.post('/api/login', function(req, res, next) {
 		res.render('profile.ejs', {
 			user : req.user // get the user out of session and pass to template
 		});
+	});	
+	
+	
+	app.get('/api/welcome', isLoggedIn, function(req, res) {
+		console.log("req.user: ", req.user)
+		console.log("req.session: ", req.session)
+		res.send('testing welcome')
 	});
+
+
 
 	// =====================================
 	// LOGOUT ==============================
 	// =====================================
-	app.get('/logout', function(req, res) {
+	app.get('/api/logout', function(req, res) {
 		req.logout();
-		res.redirect('/');
+		res.send('/');
 	});
 };
 
 // route middleware to make sure
 function isLoggedIn(req, res, next) {
-
+	console.log('req.session', req.session)
 	// if user is authenticated in the session, carry on
-	if (req.isAuthenticated())
+	if (req.isAuthenticated()){
+
 		return next();
+	}
+	else{
+		console.log('req.user: ',req.user)
+		res.send('failed to authenticate')
+	}
+		
+
 
 	// if they aren't redirect them to the home page
-	res.redirect('/');
+	// res.redirect('/');
 }

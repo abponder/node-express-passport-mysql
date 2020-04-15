@@ -5,7 +5,7 @@ var LocalStrategy   = require('passport-local').Strategy;
 
 // load up the user model
 var mysql = require('mysql');
-var bcrypt = require('bcrypt-nodejs');
+var bcrypt = require('bcryptjs');
 //var dbconfig = require('./database');
 require('dotenv').config();
 //var connection = mysql.createConnection(dbconfig.connection);
@@ -30,12 +30,14 @@ module.exports = function(passport) {
 
     // used to serialize the user for the session
     passport.serializeUser(function(user, done) {
+        console.log('serializeUser:', user)
         done(null, user.id);
     });
 
     // used to deserialize the user
     passport.deserializeUser(function(id, done) {
         // connection.connect();
+        console.log('deserializeUser:',id)
         connection.query("SELECT * FROM users WHERE id = ? ",[id], function(err, rows){
             done(err, rows[0]);
         });
@@ -115,7 +117,7 @@ module.exports = function(passport) {
                 if (!rows.length) {
                     //return done(null, {});
                     // res.locals.flash = req.flash('loginMessage');
-                    req.test = 'testing'
+                    
                     // return done(null, false, req.flash('loginMessage', 'No user found.')); // req.flash is the way to set flashdata using connect-flash
                     req.flash('loginMessage', 'Oops! unable to validate user name or password.')  //set the message
                     return done (null, false, req.flash('loginMessage')) //get the message
@@ -127,8 +129,11 @@ module.exports = function(passport) {
                     req.flash('loginMessage', 'Oops! unable to validate user name or password.')  //set the message
                     return done (null, false, req.flash('loginMessage')) //get the message
                 }
-                    
+                console.log(rows[0])
+                console.log('req.session passport.js',req.session)
+                req.session.passport = {id: rows[0].id}
                 return done(null, rows[0]);
+
             });
             // connection.end();
         })

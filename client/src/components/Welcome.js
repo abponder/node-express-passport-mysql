@@ -1,18 +1,51 @@
 import React from 'react';
 import {Link} from "react-router-dom";
+import axios from "axios";
+import Alert from 'react-bootstrap/Alert';
+import { Redirect } from "react-router-dom";
 
 
-function Welcome() {
-  return (
-    <div className="container" style={{ paddingTop: '80px' }}>
+class Welcome extends React.Component{
+   state={
+     isAuthenticated : false,
+     redirect:''
+   }
+  isAuthenticated = (e) => {
     
-   Welcome to Welcome page
+    axios.get('/api/welcome', { withCredentials: true })
+    .then(res => {
+      console.log('api welcome res;', res)
+      
+      if(res.data.user) { 
+        this.setState({
+          isAuthenticated:true
+        })
 
-    
-
-</div>
-
-  );
+      }else{
+        this.setState({
+          redirect:'/'
+        })
+      }
+      
+    })
+  }
+ render(){
+   this.isAuthenticated()
+  if (this.state.redirect) {
+    return <Redirect to={this.state.redirect} />
+  }
+  if(this.state.isAuthenticated){
+    return (
+      <div className="container" style={{ paddingTop: '80px' }}>
+      
+     Welcome to Welcome page
+  
+  </div>
+  
+    );
+  }
+  return <div></div>
 }
+ }
 
 export default Welcome;
