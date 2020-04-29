@@ -1,5 +1,22 @@
 source ref: https://github.com/manjeshpv/node-express-passport-mysql
 
+for 5/5/20
+- fix ui for errors that are coming updated
+- keep an eye on api
+- ui stuff like if login can they access other pages
+
+
+
+
+
+
+============================================================
+
+for 4/21/20
+we don't want to redirect on failure ... must be option in passport.
+
+=====================================================================================================
+
 for 4/14/20
 compared the original 
 main thing not working ... req.user becomes undefined ... maybe ejs sends something from browser?

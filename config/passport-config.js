@@ -1,30 +1,57 @@
-const LocalStrategy = require('passport-local').Strategy
-const bcrypt = require('bcrypt')
+var passport = require('passport')
+  , LocalStrategy = require('passport-local').Strategy;
 
-function initialize(passport, getUserByEmail, getUserById) {
-  const authenticateUser = async (req, username, password, done) => {
-    const user = getUserByEmail(email)
-    if (user == null) {
-      return done(null, false, {message: 'No user with that email' })
-    }
+  var mysql = require('mysql');
+  var bcrypt = require('bcryptjs');
 
-    try {
-        if (await bcrypt.compare(password, user.password)) {
-          return done(null, user)
-        } else {
-          return done(null, false, {message:'Password incorrect'})
-        }
-      } catch (e) {
-        return done(e)
+  require('dotenv').config();
+  //var connection = mysql.createConnection(dbconfig.connection);
+  var connection = mysql.createConnection({
+      'host': process.env.host,
+      'user': process.env.user,
+      'password': process.env.password
+  });
+
+  connection.query('USE ' + process.env.database);
+
+
+  module.exports = function(passport) {
+    passport.serializeUser(function(user, done) {
+      done(null, user.id);
+    });
+    
+    passport.deserializeUser(function(id, done) {
+      connection.query("SELECT * FROM users WHERE id = ? ",[id], function(err, rows){
+        done(err, rows[0]);
+    });
+    });
+    passport.use(new LocalStrategy(
+      function(username, password, done) {
+
+        connection.query(`SELECT * FROM users WHERE username = '${username}'`, function(err, rows) {
+            console.log(err, rows)
+            if(!rows.length){
+              return done(null,false,'')
+            }
+        })
       }
-}
+    ));
+  }
 
-  passport.use(new LocalStrategy({ usernameField: 'email'},
-  authenticateUser))
-  passport.serializeUser((user, done) => done(null, user.id))
-  passport.deserializeUser((id, done) => {
-    return done(null, getUserById(id))
-  })
-}
 
-module.exports = initialize
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
