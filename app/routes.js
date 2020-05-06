@@ -27,7 +27,7 @@ module.exports = function(app, passport) {
         if (err) return res.json({ err: true, msg: err.message });
 
         req.session.cookie.expires = false;
-        return res.json({ err: false, data: user });
+        return res.json({ err: false, user: user });
       });
     })(req, res, next);
   });
@@ -48,7 +48,7 @@ module.exports = function(app, passport) {
       if (!user) return res.json(info);
       req.logIn(user, function(err) {
         if (err) return res.json({ err: true, msg: err.message });
-        return res.json({ err: false, data: user });
+        return res.json({ err: false, user: user });
       });
     })(req, res, next);
   });
@@ -58,8 +58,9 @@ module.exports = function(app, passport) {
 	// =====================================
 	// we will want this protected so you have to be logged in to visit
 	// we will use route middleware to verify this (the isLoggedIn function)
-	app.get('/api/profile', isLoggedIn, function(req, res) {
-    return res.json({ err: false, data: req.user });
+	app.get('/api/welcome', isLoggedIn, function(req, res) {
+		// if (err) return res.json({ err: true, msg: err.message });
+    return res.json({ err: false, user: req.user });
 	});
 
 	// =====================================
@@ -76,8 +77,9 @@ function isLoggedIn(req, res, next) {
 	// if user is authenticated in the session, carry on
 	if (req.isAuthenticated()) {
     console.log('is authenticated',req.isAuthenticated() )
-    console.log('req.session',req.session )
-    return next();
+		console.log('req.session',req.session )
+		return res.json({ err: false, user: req.user });
+    // return next();
   } else {
     return res.json({ err: true, msg: 'Unable to authenticate user.' });
   }

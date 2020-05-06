@@ -10,6 +10,9 @@ class Welcome extends React.Component{
      isAuthenticated : false,
      redirect:''
    }
+  componentDidMount(){
+    this.isAuthenticated()
+  }
   isAuthenticated = (e) => {
     
     axios.get('/api/welcome', { withCredentials: true })
@@ -30,7 +33,7 @@ class Welcome extends React.Component{
     })
   }
  render(){
-   this.isAuthenticated()
+   
   if (this.state.redirect) {
     return <Redirect to={this.state.redirect} />
   }

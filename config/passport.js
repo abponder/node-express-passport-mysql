@@ -48,10 +48,12 @@ module.exports = function(passport) {
         function(username, password, done) {
             // find a user whose email is the same as the forms email
             // we are checking to see if the user trying to login already exists
+            const msg = []
             connection.query("SELECT * FROM users WHERE username = ?",[username], function(err, rows) {
                 if (err) return done(err);
                 if (rows.length) {
-                  return done(null, false, {err: true, msg: 'That username is already taken.'});
+                  msg.push('That username is already taken.')
+                  return done(null, false, {err: true, msg: msg});
                 } else {
                   // if there is no user with that username, create the user
                   const newUser = {
@@ -84,15 +86,19 @@ module.exports = function(passport) {
           passReqToCallback : true // allows us to pass back the entire request to the callback
         },
         function(req, username, password, done) { // callback with email and password from our form
+          const msg = []
             connection.query("SELECT * FROM users WHERE username = ?",[username], function(err, rows){
                 if (err) return done(err);
                 if (!rows.length) {
-                  return done(null, false, {err: true, msg: 'No user found.'});
+                  msg.push('Unable to validate.')
+                  return done(null, false, {err: true, msg:msg});
                 }
 
                 // if the user is found but the password is wrong
                 if (!bcrypt.compareSync(password, rows[0].password)) {
-                  return done(null, false, {err: true, msg: 'Oops! Wrong password.'});
+                  msg.push( 'Unable to validate 2.')
+                  msg.push( 'testin a new message.')
+                  return done(null, false, {err: true, msg:msg});
                 }
             
                 // all is well, return successful user

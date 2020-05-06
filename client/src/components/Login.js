@@ -33,7 +33,7 @@ class Login extends React.Component {
       password:this.state.password
     })
     .then(res => {
-      
+      console.log(res)
       if(res.data.user) {
         this.setState({
           redirect:'/welcome'
@@ -41,8 +41,8 @@ class Login extends React.Component {
 
       }else{
         this.setState({
-          flashMessages:res.data.message,
-          showFlash:res.data.message.length ? true : false
+          flashMessages:res.data.msg,
+          showFlash:res.data.msg.length ? true : false
         })
       }
       
