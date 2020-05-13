@@ -21,13 +21,33 @@ class Login extends React.Component {
   handleChange = e => {
     let value = e.target.type === 'checkbox' ? !this.state.remember : e.target.value; 
     this.setState({
-      [e.target.name]: value
-      
+      [e.target.name]: value,
+      flashMessages:[],
+      showFlash:false
     })
+    // console.log(this.state)
   }
 
   onSubmit = (e) => {
     e.preventDefault()
+    console.log(this.state)
+    if(!this.state.username || !this.state.password ){
+      console.log('testing 1')
+      const newmessages = [] 
+      if(!this.state.username){
+        newmessages.push('User Name is Required')
+      }
+      if(!this.state.password){
+        newmessages.push('Password is Required')
+      }
+      console.log(newmessages)
+      return this.setState({
+        flashMessages: [...this.state.flashMessages, ...newmessages],
+        showFlash: true
+      })
+     
+    }
+    
     axios.post('/api/login',{
       username:this.state.username,
       password:this.state.password
@@ -36,7 +56,8 @@ class Login extends React.Component {
       console.log(res)
       if(res.data.user) {
         this.setState({
-          redirect:'/welcome'
+          redirect:'/welcome',
+          
         })
 
       }else{

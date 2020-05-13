@@ -1,9 +1,10 @@
 source ref: https://github.com/manjeshpv/node-express-passport-mysql
 
-for 5/5/20
-- fix ui for errors that are coming updated
-- keep an eye on api
-- ui stuff like if login can they access other pages
+for 5/19/20
+- work on nav bar
+- signout button in nav bar
+- update react router to add nav bar on all pages
+  -hide something if they are not signed up
 
 
 

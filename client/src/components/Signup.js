@@ -21,31 +21,31 @@ class Signup extends React.Component {
   handleChange = e => {
     let value = e.target.type === 'checkbox' ? !this.state.remember : e.target.value; 
     this.setState({
-      [e.target.name]: value
+      [e.target.name]: value,
+      flashMessages:[],
+      showFlash:false
       
     })
   }
 
   onSubmit = (e) => {
     e.preventDefault()
-    if(!this.state.username){
+    if(!this.state.username || !this.state.password ){
       console.log('testing 1')
+      const newmessages = [] 
+      if(!this.state.username){
+        newmessages.push('User Name is Required')
+      }
+      if(!this.state.password){
+        newmessages.push('Password is Required')
+      }
+      console.log(newmessages)
       return this.setState({
-        flashMessages: [...this.state.flashMessages, 'User Name is Required'],
+        flashMessages: [...this.state.flashMessages, ...newmessages],
         showFlash: true
       })
+     
     }
-    if(!this.state.password){
-      console.log('testing 2')
-      return this.setState({
-        flashMessages: [...this.state.flashMessages, 'Password is Required'],
-        showFlash: true
-      })
-    }
-    // if(this.state.flashMessages.length){
-    //   console.log('testing')
-    //   return
-    // }
     console.log(this.state)
     axios.post('/api/signup',{
       username:this.state.username,
