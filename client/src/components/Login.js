@@ -56,7 +56,7 @@ class Login extends React.Component {
       console.log(res)
       if(res.data.user) {
         this.setState({
-          redirect:'/welcome',
+          redirect:'/welcome'
           
         })
 

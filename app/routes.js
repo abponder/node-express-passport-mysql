@@ -66,10 +66,11 @@ module.exports = function(app, passport) {
 	// =====================================
 	// LOGOUT ==============================
 	// =====================================
-	app.get('/logout', function(req, res) {
-		req.logout();
-		res.redirect('/');
-	});
+	app.post('/api/logout', (req, res) => {
+		req.logout()
+		// res.json({ err: false, user: null });
+		res.redirect("/")
+  });
 };
 
 // route middleware to make sure

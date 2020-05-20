@@ -23,7 +23,9 @@ class Welcome extends React.Component{
         this.setState({
           isAuthenticated:true
         })
-
+   
+      localStorage.setItem("username", res.data.user.username)
+        
       }else{
         this.setState({
           redirect:'/'
