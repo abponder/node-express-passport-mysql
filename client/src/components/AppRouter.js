@@ -26,44 +26,71 @@ class AppRouter extends React.Component {
   constructor(props) {
     super(props);
      this.state = {
-       username:null
+       username:null,
+       redirect:''
      }
   }
 
   componentDidMount(){
     const username = localStorage.getItem("username")
-      if(username!=="null"){
+      
+    if(username!=="null"){
         this.setState({
           username
         })
       }
   }
 
-logout = () => {
-  axios.post('/api/logout')
-  .then(res => {
-    console.log(res)
-    if(!res.data.user) {
-      this.setState({
-        redirect:'/',
-        username:null
-      })
-      localStorage.removeItem("username")
-    }
+
+updateusername = (username) => {
+ 
+  this.setState({
+    username
   })
 }
 
 
+isloggedin = () => {
+  const username = localStorage.getItem("username")
+  
+  if (username !== 'null') {
+    this.setState({
+      username
+    })
+    return true
+  }
+    this.setState({
+    username:null
+  })
+    return false
+}
+
+logout = () => {
+  axios.post('/api/logout')
+  .then(res => {
+    
+    this.setState({
+      redirect:'/',
+      username:null
+    })
+    localStorage.removeItem("username")
+    
+  })
+  .finally(() => {
+    this.setState({
+      redirect:''
+    })
+  })
+}
+
   render(){
-    // if (this.state.redirect) {
-    //   return <Redirect to={this.state.redirect} />
-    // }
-    console.log(this.state)
+    const { username, redirect } = this.state
+
     return (
       <Router>  
         <div>
           {this.state.redirect && (
-            <Redirect to={this.state.redirect} />
+            <Redirect to={redirect} />
           )}
         <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
         <Nav.Item > 
@@ -82,12 +109,21 @@ logout = () => {
         </Nav.Link>
       </Nav>
       <Nav>
-        <NavDropdown title={this.state.username ? this.state.username : "Dropdown"} id="collasible-nav-dropdown" style={{marginRight: '60px'}}>
+        <NavDropdown 
+          title={username ? username : "Dropdown"} 
+          id="collasible-nav-dropdown" 
+          style={{marginRight: '60px'}}
+          onClick={this.isloggedin}
+        >
           <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
           <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
           <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-          <NavDropdown.Divider />
-          <NavDropdown.Item onClick={this.logout}>Logout</NavDropdown.Item>
+          { username && (
+            <>
+              <NavDropdown.Divider />
+              <NavDropdown.Item onClick={this.logout}>Logout</NavDropdown.Item>
+            </>
+          )}
         </NavDropdown>
       </Nav>
     </Navbar.Collapse>
@@ -105,7 +141,7 @@ logout = () => {
               <Home />
             </Route>
             <Route path="/login">
-              <Login />
+              <Login updateusername={this.updateusername}/>
             </Route>
             <Route path="/signup">
               <Signup />

@@ -1,14 +1,21 @@
 source ref: https://github.com/manjeshpv/node-express-passport-mysql
 
-for 5/19/20
-- work on nav bar
-- signout button in nav bar
-- update react router to add nav bar on all pages
-  -hide something if they are not signed up
+============================================================
 
 
+for 6/9/20
+show user name as soon as user logs in
+- options: maybe user login sign up options in the drop down
 
 
+============================================================
+
+for 6/2/20
+- working on logout visibility
+  should be hidden before login
+  issue: component not updating.
+  need to force update; 
+  handle the case where username is not null
 
 
 ============================================================
@@ -26,11 +33,10 @@ log req.cookie in orig app .. compared
 maybe isauthenticated is not defined in passport lib? ours in returning undefined
 in server.js we are using a very old configuration ... order or part could be updated in passport library
 
-========================================
+============================================================
 for 4/7/20
 maybe lost some cookie functionality that ejs had. start the original project again and log values.
 how to use cookie using js. need to be able to validate the cookie, where using loggedIn middleware.
-
 
 
 ====================================================================================================

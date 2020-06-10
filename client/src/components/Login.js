@@ -55,6 +55,8 @@ class Login extends React.Component {
     .then(res => {
       console.log(res)
       if(res.data.user) {
+        this.props.updateusername(res.data.user.username)
+        
         this.setState({
           redirect:'/welcome'
           
