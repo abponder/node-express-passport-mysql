@@ -1,3 +1,12 @@
+require('dotenv').config();
+const mysql = require('mysql');
+var connection = mysql.createConnection({
+    'host': process.env.host,
+    'user': process.env.user,
+    'password': process.env.password
+});
+connection.query('USE ' + process.env.database);
+
 // app/routes.js
 module.exports = function(app, passport) {
 
@@ -62,6 +71,28 @@ module.exports = function(app, passport) {
 		// if (err) return res.json({ err: true, msg: err.message });
     return res.json({ err: false, user: req.user });
 	});
+
+	app.get('/api/schedule', (req,res)=> {
+		let results
+		connection.query(`SELECT  meeting_id, meeting_title, DATE_FORMAT(start_date, "%M %D, %Y"), start_time, attendees, topics_discussed, status FROM meetings`, (err, rows, fields) => {
+			if (err) console.log(err)
+				console.log('its working !', rows)
+				let formatedrows=rows.map(record => {
+					return {
+						meetingId:record.meeting_id,
+						meetingTitle:record.meeting_title,
+						startDate:record['DATE_FORMAT(start_date, "%M %D, %Y")'],
+						startTime:record.start_time,
+						attendees:record.attendees,
+						topicsDiscussed:record.topics_discussed,
+						status:record.status[0].toUpperCase() + record.status.slice(1)
+	
+					}
+				})
+			res.send(formatedrows)
+			// results = rows
+		})
+	})
 
 	// =====================================
 	// LOGOUT ==============================

@@ -9,10 +9,18 @@ import Home from "./Home.js"
 import Login from "./Login.js";
 import Signup from "./Signup.js";
 import Welcome from "./Welcome.js";
+import Schedule from "./Schedule.js";
 import { Nav, Navbar, NavDropdown } from 'react-bootstrap'
 import axios from "axios";
 import { Redirect } from "react-router-dom";
-
+import styled from 'styled-components';
+const HoverText = styled.span`
+	color: rgba(255,255,255,.5);
+	:hover {
+		text-decoration: none !important;
+		color: rgba(255,255,255,.75);
+	}
+`
 // This site has 3 pages, all of which are rendered
 // dynamically in the browser (not server rendered).
 //
@@ -94,14 +102,20 @@ logout = () => {
           )}
         <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
         <Nav.Item > 
-          <Link to="/">
+          <Link to="/welcome">
             HOME
           </Link>
           </Nav.Item>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="mr-auto">
-        <Nav.Link href="#features">Features</Nav.Link>
+        <Nav.Item className = "nav-link"> 
+          <Link to="/schedule" style={{ textDecoration: 'none' }} >
+            <HoverText>
+            Schedules
+            </HoverText>
+          </Link>
+        </Nav.Item>
         <Nav.Link href="#pricing">Pricing</Nav.Link>
         <Nav.Link href="#deets">More deets</Nav.Link>
         <Nav.Link eventKey={2} href="#memes">
@@ -148,6 +162,9 @@ logout = () => {
             </Route>
             <Route path="/welcome">
               <Welcome />
+            </Route>
+            <Route path="/schedule">
+              <Schedule />
             </Route>
           </Switch>
         </div>
