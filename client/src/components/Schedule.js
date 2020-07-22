@@ -17,7 +17,9 @@ class Schedule extends React.Component {
        modal: false,
       currentMeeting:{},
       isAuthenticated : false,
-     redirect:''
+     redirect:'',
+     action:'',
+     type:''
      }
   }
 
@@ -58,7 +60,9 @@ class Schedule extends React.Component {
   handleSubmit = (event,data) => {
     event.preventDefault()
     console.log('submitted form',data)
-    axios.put('/api/edit', data)
+
+    // axios.put('/api/edit', data)
+    axios[data.type](`/api/${data.action}`, data)
     .then(res => {
       console.log('new data', res)
     let updatedSchedule = this.state.schedule.slice()
@@ -86,7 +90,7 @@ class Schedule extends React.Component {
     let meetings 
     if (this.state.schedule.length) {
       meetings = this.state.schedule.map(meetingobject => (
-        <tr key={meetingobject.meetingId} onClick={() => this.setState({ modal: true, currentMeeting:meetingobject })}>
+        <tr key={meetingobject.meetingId} onClick={() => this.setState({ modal: true, action:'edit', type:'put', currentMeeting:meetingobject })}>
           <td>{meetingobject.meetingTitle}</td>
           <td>{meetingobject.startDate}</td>
           <td>{meetingobject.status}</td>
@@ -98,10 +102,10 @@ if(this.state.isAuthenticated){
 return (
       <div>
         <h2>Schedule</h2>
-        {/* <Button onClick={() => this.setState({ modal: true })}>Modal Button</Button> */}
+        <Button onClick={() => this.setState({ modal: true, action:'add', type:'post' })}>New Meeting</Button>
         <Modal 
           show={this.state.modal}
-          onHide={() => this.setState({ modal: false })}
+          onHide={() => this.setState({ modal: false, currentMeeting:{} })}
           modalbody={(
             <Customform
               meetingId={this.state.currentMeeting.meetingId}
@@ -112,6 +116,8 @@ return (
               topicsDiscussed={this.state.currentMeeting.topicsDiscussed}
               status={this.state.currentMeeting.status}
               onSubmit={this.handleSubmit}
+              action={this.state.action}
+              type={this.state.type}
             />
             
           )} 

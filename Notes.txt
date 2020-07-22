@@ -1,5 +1,32 @@
 source ref: https://github.com/manjeshpv/node-express-passport-mysql
 
+
+
+fixed form to clear data.
+
+for next day 7/28
+check the date formating 
+
+fix the one where the status is not changing ... send status from the front end
+
+after, make delete functionality
+
+==================================================================
+for 7/21/20
+
+routes.js row 88 
+bug; clear data from modal when it closes
+
+=============================================================================
+
+
+for 7/14/20 (skip 07/07/20): 
+  - work on creating a new meeting,
+  - fix logout so that you go to welcome; currently still stays on schedule.
+
+completed edit of an existing meeting today (06/30/20)
+
+
 ============================================================
 
 

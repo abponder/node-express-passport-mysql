@@ -11,7 +11,9 @@ class Customform extends React.Component {
       startTime: this.props.startTime || '',
       attendees: this.props.attendees || '',
       topicsDiscussed: this.props.topicsDiscussed || '',
-      status: this.props.status || ''
+      status: this.props.status || '',
+      action:this.props.action || '',
+      type:this.props.type || ''
      }
   }
     // e here means event
@@ -37,7 +39,7 @@ class Customform extends React.Component {
           {/* <Form.Row> */}
             <Form.Group>
               <Form.Label>Start Date</Form.Label>
-              <Form.Control onChange={this.handleChange} name="startDate"  type="text" value={this.state.startDate} placeholder="Start Date" />
+              <Form.Control onChange={this.handleChange} name="startDate" type="date" value={this.state.startDate} placeholder="Start Date" />
             </Form.Group>
           {/* </Form.Row> */}
 
