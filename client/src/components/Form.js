@@ -7,11 +7,11 @@ class Customform extends React.Component {
      this.state = {
       meetingId:this.props.meetingId || '',
       meetingTitle: this.props.meetingTitle || '',
-      startDate: this.props.startDate || '',
+      startDate: this.props.startDate ? (new Date(this.props.startDate)).toISOString().slice(0, 10) : '',
       startTime: this.props.startTime || '',
       attendees: this.props.attendees || '',
       topicsDiscussed: this.props.topicsDiscussed || '',
-      status: this.props.status || '',
+      status: this.props.status || 'Open',
       action:this.props.action || '',
       type:this.props.type || ''
      }
@@ -67,7 +67,7 @@ class Customform extends React.Component {
           {/* </Form.Row> */}
             <Form.Group>
               <Form.Label>Status</Form.Label>
-              <Form.Control as="select" onChange={this.handleChange} name="status" value = {this.state.status} > 
+              <Form.Control as="select" onChange={this.handleChange} name="status" value={this.state.status} > 
                 <option value="Open">Open</option>
                 <option value="Completed">Completed</option>
               </Form.Control>

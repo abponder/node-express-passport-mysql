@@ -1,6 +1,10 @@
 source ref: https://github.com/manjeshpv/node-express-passport-mysql
 
+for 8/18/20
 
+make delete functionality -- add delete button on each schedule item
+
+=======================================================================
 
 fixed form to clear data.
 

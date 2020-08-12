@@ -25,10 +25,10 @@ class Schedule extends React.Component {
 
   componentDidMount(){
     this.isAuthenticated()
-    console.log("component has mounted")
+  
     axios.get('/api/schedule')
     .then(res => {
-      console.log(res.data)
+    
       this.setState({
         schedule:res.data
       })
@@ -39,7 +39,7 @@ class Schedule extends React.Component {
     
     axios.get('/api/welcome', { withCredentials: true })
     .then(res => {
-      console.log('api welcome res;', res)
+    
       
       if(res.data.user) { 
         this.setState({
@@ -59,20 +59,29 @@ class Schedule extends React.Component {
 
   handleSubmit = (event,data) => {
     event.preventDefault()
-    console.log('submitted form',data)
+  
 
     // axios.put('/api/edit', data)
     axios[data.type](`/api/${data.action}`, data)
     .then(res => {
-      console.log('new data', res)
+      data.startDate = data.startDate.slice(5,7) + '/' + data.startDate.slice(-2) + '/' + data.startDate.slice(0,2)
+    console.log('this is data', data)
     let updatedSchedule = this.state.schedule.slice()
+    let updatedmeeting = false
     for (let i =0; i<updatedSchedule.length; i++){
       if(updatedSchedule[i].meetingId===data.meetingId){
-        console.log('if statement is running')
+        updatedmeeting = true
+      
         updatedSchedule[i]=data
+      
       }
     }
-    console.log('updatedSchedule', updatedSchedule)
+    if(!updatedmeeting){
+      console.log(res.data.insertId)
+      data.meetingId = res.data.insertId
+      updatedSchedule.push(data)
+    }
+  
     this.setState({ 
       modal: false, 
       schedule:updatedSchedule
@@ -86,9 +95,13 @@ class Schedule extends React.Component {
     if (this.state.redirect) {
       return <Redirect to={this.state.redirect} />
     }
-    console.log(this.state)
+    
+    
     let meetings 
     if (this.state.schedule.length) {
+      const datex = new Date(this.state.schedule[0].startDate)
+    
+    
       meetings = this.state.schedule.map(meetingobject => (
         <tr key={meetingobject.meetingId} onClick={() => this.setState({ modal: true, action:'edit', type:'put', currentMeeting:meetingobject })}>
           <td>{meetingobject.meetingTitle}</td>

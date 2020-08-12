@@ -74,14 +74,15 @@ module.exports = function(app, passport) {
 
 	app.get('/api/schedule', (req,res)=> {
 		let results
-		connection.query(`SELECT  meeting_id, meeting_title, start_date, start_time, attendees, topics_discussed, status FROM meetings`, (err, rows, fields) => {
+		connection.query(`SELECT  meeting_id, meeting_title, date_format(start_date, "%m/%d/%y") as start_date, start_time, attendees, topics_discussed, status FROM meetings`, (err, rows, fields) => {
 			if (err) console.log(err)
-				console.log('its working !', rows)
 				let formatedrows=rows.map(record => {
+					console.log(record)
 					return {
 						meetingId:record.meeting_id,
 						meetingTitle:record.meeting_title,
-						startDate:record['DATE_FORMAT(start_date, "%M %D, %Y")'],
+						// startDate:record.start_date.toString().slice(0,15),
+						startDate:record.start_date,
 						startTime:record.start_time,
 						attendees:record.attendees,
 						topicsDiscussed:record.topics_discussed,
@@ -89,6 +90,7 @@ module.exports = function(app, passport) {
 	
 					}
 				})
+				console.log('its working !', formatedrows)
 			res.send(formatedrows)
 			// results = rows
 		})
@@ -100,7 +102,7 @@ module.exports = function(app, passport) {
 		connection.query(`
 			UPDATE meetings 
 			SET meeting_title = '${req.body.meetingTitle}',  
-			start_date = STR_TO_DATE('${req.body.startDate}', "%M %D, %Y"), 
+			start_date = '${req.body.startDate}', 
 			start_time = '${req.body.startTime}',
 			attendees = '${req.body.attendees}',
 			topics_discussed = '${req.body.topicsDiscussed}',
@@ -127,9 +129,10 @@ module.exports = function(app, passport) {
 			'${req.body.status.length ? req.body.status : "Open"}')`, (err, result) => {
 				console.log('err :',err)  
 			console.log('new edit data', result)
+			res.send(result)
 		})
 	
-		res.send(req.body)
+		
 	
 	})
 
