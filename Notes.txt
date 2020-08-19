@@ -4,6 +4,9 @@ for 8/18/20
 
 make delete functionality -- add delete button on each schedule item
 
+
+for future: send back error response; 
+
 =======================================================================
 
 fixed form to clear data.

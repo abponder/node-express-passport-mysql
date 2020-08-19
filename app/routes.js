@@ -131,10 +131,20 @@ module.exports = function(app, passport) {
 			console.log('new edit data', result)
 			res.send(result)
 		})
-	
-		
-	
 	})
+
+
+	app.delete('/api/delete', (req,res)=> {
+		console.log(req.body)
+		connection.query(`
+		DELETE FROM mtgpassport.meetings WHERE meeting_id = ${req.body.meetingId};`,
+			 (err, result) => {
+				console.log('err :',err)  
+			console.log('delete', result)
+			res.send(result)
+		})
+	})
+
 
 	// =====================================
 	// LOGOUT ==============================

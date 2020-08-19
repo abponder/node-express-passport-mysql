@@ -57,6 +57,19 @@ class Schedule extends React.Component {
     })
   }
 
+  handleDelete = (event, meetingId) => {
+    event.preventDefault()
+    console.log({meetingId})
+    axios.delete(`/api/delete`, {data:{meetingId}}) //added {data:} because its a requirement from axios
+    .then(() => {
+      let updatedSchedule = this.state.schedule.slice().filter(mtg => mtg.meetingId !== meetingId)
+      this.setState({ 
+        schedule:updatedSchedule
+      })
+    })
+  }
+
+
   handleSubmit = (event,data) => {
     event.preventDefault()
   
@@ -103,10 +116,14 @@ class Schedule extends React.Component {
     
     
       meetings = this.state.schedule.map(meetingobject => (
-        <tr key={meetingobject.meetingId} onClick={() => this.setState({ modal: true, action:'edit', type:'put', currentMeeting:meetingobject })}>
+        <tr key={meetingobject.meetingId} >
           <td>{meetingobject.meetingTitle}</td>
           <td>{meetingobject.startDate}</td>
           <td>{meetingobject.status}</td>
+          <td>
+            <button onClick={() => this.setState({ modal: true, action:'edit', type:'put', currentMeeting:meetingobject })} className="btn-primary">edit</button> &nbsp;&nbsp;
+            <a href = "" style = {{color:"red"}} onClick={e => this.handleDelete(e, meetingobject.meetingId)} >delete</a>
+          </td>
         </tr>
       ))
     }
@@ -144,6 +161,7 @@ return (
                 <th>Meeting Description</th>
                 <th>Meeting Date</th>
                 <th>Status</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
