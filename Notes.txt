@@ -1,5 +1,15 @@
 source ref: https://github.com/manjeshpv/node-express-passport-mysql
 
+8/25/20
+
+
+add custom modal to confirm
+
+
+
+==========================================================================
+
+
 for 8/18/20
 
 make delete functionality -- add delete button on each schedule item

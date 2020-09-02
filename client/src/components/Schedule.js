@@ -1,13 +1,20 @@
 import React from 'react';
 import axios from "axios";
-import Button from 'react-bootstrap/Button'
 import Modal from './Modal.js'
-import Table from 'react-bootstrap/Table'
+import {Table, Button} from 'react-bootstrap/'
 import Customform from './Form.js'
+import ConfirmModal from './Confirm.js'
 import { Redirect } from "react-router-dom";
 
 
-
+const DeleteModalBody = props => {
+  return (
+    <>
+    <Button onClick={props.handleDelete} variant="danger">Delete</Button>
+    <Button onClick={props.onHide} variant="primary">Close</Button>
+    </>
+  )
+}
 
 class Schedule extends React.Component {
   constructor(props) {
@@ -15,6 +22,10 @@ class Schedule extends React.Component {
      this.state = {
        schedule:[],
        modal: false,
+       confirm: {
+         modal:false,
+         meetingId:""
+        },
       currentMeeting:{},
       isAuthenticated : false,
      redirect:'',
@@ -57,6 +68,24 @@ class Schedule extends React.Component {
     })
   }
 
+  deleteClicked = (e, meetingId)  => {
+    e.preventDefault()
+    this.setState({ 
+      confirm: { 
+        modal: true,
+        meetingId: meetingId,
+        body: (
+          <DeleteModalBody
+            handleDelete={(e) => this.handleDelete(e, this.state.confirm.meetingId)}
+            onHide={() => this.setState({ confirm: { modal: false, meetingId:"" }} )}
+          />
+        )
+      }
+
+    })
+  }
+
+
   handleDelete = (event, meetingId) => {
     event.preventDefault()
     console.log({meetingId})
@@ -64,7 +93,8 @@ class Schedule extends React.Component {
     .then(() => {
       let updatedSchedule = this.state.schedule.slice().filter(mtg => mtg.meetingId !== meetingId)
       this.setState({ 
-        schedule:updatedSchedule
+        schedule:updatedSchedule,
+        confirm:{modal:false}
       })
     })
   }
@@ -122,7 +152,7 @@ class Schedule extends React.Component {
           <td>{meetingobject.status}</td>
           <td>
             <button onClick={() => this.setState({ modal: true, action:'edit', type:'put', currentMeeting:meetingobject })} className="btn-primary">edit</button> &nbsp;&nbsp;
-            <a href = "" style = {{color:"red"}} onClick={e => this.handleDelete(e, meetingobject.meetingId)} >delete</a>
+            <a href = "" style = {{color:"red"}} onClick={e => this.deleteClicked(e, meetingobject.meetingId)} >delete</a>
           </td>
         </tr>
       ))
@@ -152,6 +182,11 @@ return (
             
           )} 
           
+        />
+        <ConfirmModal
+           show={this.state.confirm.modal}
+           onHide={() => this.setState({ confirm: { modal: false, meetingId:"" }} )}
+           body = {this.state.confirm.body}
         />
         {/* {this.state.schedule.length && meetings} */}
         {this.state.schedule.length && (
