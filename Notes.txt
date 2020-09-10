@@ -1,5 +1,16 @@
 source ref: https://github.com/manjeshpv/node-express-passport-mysql
 
+
+For next time: wed 9th
+
+- formating examples / more bootstrap
+- create more components for practise
+- create levels of authentication: manager, location, etc
+- Bring in more data tables
+- branch
+
+====================================================================
+
 8/25/20
 
 

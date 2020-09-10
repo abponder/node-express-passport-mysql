@@ -49,7 +49,7 @@ class AppRouter extends React.Component {
       }
   }
 
-
+ 
 updateusername = (username) => {
  
   this.setState({
@@ -93,7 +93,6 @@ logout = () => {
 
   render(){
     const { username, redirect } = this.state
-
     return (
       <Router>  
         <div>

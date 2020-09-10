@@ -6,6 +6,7 @@ import Signup from "./Signup";
 
 
 function Home() {
+  localStorage.removeItem("username")
   return (
     <div className="container" style={{ paddingTop: '80px' }}>
     <div className="jumbotron text-center">
