@@ -4,7 +4,6 @@ import {Modal, Button} from 'react-bootstrap/'
 
 
 export default function ConfirmModal(props) {
-  console.log(props)
   const test = props.body
   return (
     <Modal

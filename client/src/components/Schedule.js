@@ -39,7 +39,7 @@ class Schedule extends React.Component {
   
     axios.get('/api/schedule')
     .then(res => {
-    
+    console.log(res.data)
       this.setState({
         schedule:res.data
       })
@@ -88,7 +88,6 @@ class Schedule extends React.Component {
 
   handleDelete = (event, meetingId) => {
     event.preventDefault()
-    console.log({meetingId})
     axios.delete(`/api/delete`, {data:{meetingId}}) //added {data:} because its a requirement from axios
     .then(() => {
       let updatedSchedule = this.state.schedule.slice().filter(mtg => mtg.meetingId !== meetingId)
@@ -102,14 +101,12 @@ class Schedule extends React.Component {
 
   handleSubmit = (event,data) => {
     event.preventDefault()
-  
-
     // axios.put('/api/edit', data)
     axios[data.type](`/api/${data.action}`, data)
     .then(res => {
       data.startDate = data.startDate.slice(5,7) + '/' + data.startDate.slice(-2) + '/' + data.startDate.slice(0,2)
-    console.log('this is data', data)
     let updatedSchedule = this.state.schedule.slice()
+    console.log(updatedSchedule)
     let updatedmeeting = false
     for (let i =0; i<updatedSchedule.length; i++){
       if(updatedSchedule[i].meetingId===data.meetingId){
@@ -120,7 +117,6 @@ class Schedule extends React.Component {
       }
     }
     if(!updatedmeeting){
-      console.log(res.data.insertId)
       data.meetingId = res.data.insertId
       updatedSchedule.push(data)
     }
@@ -142,9 +138,7 @@ class Schedule extends React.Component {
     
     let meetings 
     if (this.state.schedule.length) {
-      const datex = new Date(this.state.schedule[0].startDate)
-    
-    
+
       meetings = this.state.schedule.map(meetingobject => (
         <tr key={meetingobject.meetingId} >
           <td>{meetingobject.meetingTitle}</td>
@@ -175,6 +169,8 @@ return (
               attendees={this.state.currentMeeting.attendees}
               topicsDiscussed={this.state.currentMeeting.topicsDiscussed}
               status={this.state.currentMeeting.status}
+              department={this.state.currentMeeting.department}
+              location={this.state.currentMeeting.location}
               onSubmit={this.handleSubmit}
               action={this.state.action}
               type={this.state.type}

@@ -31,7 +31,6 @@ class Signup extends React.Component {
   onSubmit = (e) => {
     e.preventDefault()
     if(!this.state.username || !this.state.password ){
-      console.log('testing 1')
       const newmessages = [] 
       if(!this.state.username){
         newmessages.push('User Name is Required')
@@ -39,20 +38,17 @@ class Signup extends React.Component {
       if(!this.state.password){
         newmessages.push('Password is Required')
       }
-      console.log(newmessages)
       return this.setState({
         flashMessages: [...this.state.flashMessages, ...newmessages],
         showFlash: true
       })
      
     }
-    console.log(this.state)
     axios.post('/api/signup',{
       username:this.state.username,
       password:this.state.password
     })
     .then(res => {
-      console.log(res)
       if(res.data.user) {
         this.setState({
           redirect:'/welcome'

@@ -1,7 +1,11 @@
 source ref: https://github.com/manjeshpv/node-express-passport-mysql
 
+working on:
+- add new component for drop down edits called "dept"
+- create a table for drop downs
 
-For next time: wed 9th
+
+For some other time:
 
 - formating examples / more bootstrap
 - create more components for practise

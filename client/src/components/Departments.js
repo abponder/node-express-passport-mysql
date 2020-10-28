@@ -5,7 +5,7 @@ import Alert from 'react-bootstrap/Alert';
 import { Redirect } from "react-router-dom";
 
  
-class Welcome extends React.Component{
+class Departments extends React.Component{
    state={
      isAuthenticated : false,
      redirect:''
@@ -42,7 +42,7 @@ class Welcome extends React.Component{
     return (
       <div className="container" style={{ paddingTop: '80px' }}>
       
-     Welcome to Welcome page
+     Welcome to Departments page
   
   </div>
   
@@ -52,4 +52,4 @@ class Welcome extends React.Component{
 }
  }
 
-export default Welcome;
+export default Departments;

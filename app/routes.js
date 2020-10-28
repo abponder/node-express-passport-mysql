@@ -74,10 +74,9 @@ module.exports = function(app, passport) {
 
 	app.get('/api/schedule', (req,res)=> {
 		let results
-		connection.query(`SELECT  meeting_id, meeting_title, date_format(start_date, "%m/%d/%y") as start_date, start_time, attendees, topics_discussed, status FROM meetings`, (err, rows, fields) => {
+		connection.query(`SELECT  meeting_id, meeting_title, date_format(start_date, "%m/%d/%y") as start_date, start_time, attendees, topics_discussed, status, dept_name, loc_name FROM meetings`, (err, rows) => {
 			if (err) console.log(err)
 				let formatedrows=rows.map(record => {
-					console.log(record)
 					return {
 						meetingId:record.meeting_id,
 						meetingTitle:record.meeting_title,
@@ -86,18 +85,20 @@ module.exports = function(app, passport) {
 						startTime:record.start_time,
 						attendees:record.attendees,
 						topicsDiscussed:record.topics_discussed,
-						status:record.status
-	
+						status:record.status,
+						department:record.dept_name,
+						location:record.loc_name
 					}
 				})
-				console.log('its working !', formatedrows)
+
 			res.send(formatedrows)
 			// results = rows
 		})
 	})
 
 	app.put('/api/edit', (req,res)=> {
-		console.log('this is the data coming back', req.body)
+
+
 		//changed to STR_TO_DATE, added ticks, put comma in! argh
 		connection.query(`
 			UPDATE meetings 
@@ -106,10 +107,12 @@ module.exports = function(app, passport) {
 			start_time = '${req.body.startTime}',
 			attendees = '${req.body.attendees}',
 			topics_discussed = '${req.body.topicsDiscussed}',
-			status = '${req.body.status}'
-			WHERE meeting_id = '${req.body.meetingId}'`, (err, result) => {
+			status = '${req.body.status}',
+			loc_name = '${req.body.location}',
+			dept_name = '${req.body.department}'
+			WHERE meeting_id = ${req.body.meetingId}`, (err, result) => {
 				console.log('err :',err)  
-			console.log('new edit data', result)
+
 		})
 	
 		res.send(req.body)
@@ -117,30 +120,29 @@ module.exports = function(app, passport) {
 	})
 
 	app.post('/api/add', (req,res)=> {
-		console.log('this is the data coming back', req.body)
+
 		//changed to STR_TO_DATE, added ticks, put comma in! argh
 		connection.query(`
-			INSERT INTO meetings (meeting_title, start_date, start_time, attendees, topics_discussed, status)
+			INSERT INTO meetings (meeting_title, start_date, start_time, attendees, topics_discussed, status, dept_name, loc_name)
 			VALUES ('${req.body.meetingTitle}',  
 			'${req.body.startDate}', 
 			'${req.body.startTime}',
 			'${req.body.attendees}',
 			'${req.body.topicsDiscussed}',
-			'${req.body.status.length ? req.body.status : "Open"}')`, (err, result) => {
+			'${req.body.status.length ? req.body.status : "Open"}',
+			'${req.body.department}',
+			'${req.body.location}')`, (err, result) => {
 				console.log('err :',err)  
-			console.log('new edit data', result)
 			res.send(result)
 		})
 	})
 
 
 	app.delete('/api/delete', (req,res)=> {
-		console.log(req.body)
 		connection.query(`
 		DELETE FROM mtgpassport.meetings WHERE meeting_id = ${req.body.meetingId};`,
 			 (err, result) => {
 				console.log('err :',err)  
-			console.log('delete', result)
 			res.send(result)
 		})
 	})
@@ -160,8 +162,6 @@ module.exports = function(app, passport) {
 function isLoggedIn(req, res, next) {
 	// if user is authenticated in the session, carry on
 	if (req.isAuthenticated()) {
-    console.log('is authenticated',req.isAuthenticated() )
-		console.log('req.session',req.session )
 		return res.json({ err: false, user: req.user });
     // return next();
   } else {

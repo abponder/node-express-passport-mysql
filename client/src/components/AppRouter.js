@@ -10,6 +10,8 @@ import Login from "./Login.js";
 import Signup from "./Signup.js";
 import Welcome from "./Welcome.js";
 import Schedule from "./Schedule.js";
+import Reports from "./Reports.js";
+import Departments from "./Departments.js";
 import { Nav, Navbar, NavDropdown } from 'react-bootstrap'
 import axios from "axios";
 import { Redirect } from "react-router-dom";
@@ -115,8 +117,20 @@ logout = () => {
             </HoverText>
           </Link>
         </Nav.Item>
-        <Nav.Link href="#pricing">Pricing</Nav.Link>
-        <Nav.Link href="#deets">More deets</Nav.Link>
+        <Nav.Item className = "nav-link"> 
+          <Link to="/reports" style={{ textDecoration: 'none' }} >
+            <HoverText>
+            Reports
+            </HoverText>
+          </Link>
+        </Nav.Item>
+                <Nav.Item className = "nav-link"> 
+          <Link to="/departments" style={{ textDecoration: 'none' }} >
+            <HoverText>
+            Departments
+            </HoverText>
+          </Link>
+        </Nav.Item>
         <Nav.Link eventKey={2} href="#memes">
           Dank memes
         </Nav.Link>
@@ -164,6 +178,12 @@ logout = () => {
             </Route>
             <Route path="/schedule">
               <Schedule />
+            </Route>
+            <Route path="/reports">
+              <Reports />
+            </Route>
+            <Route path="/departments">
+              <Departments />
             </Route>
           </Switch>
         </div>

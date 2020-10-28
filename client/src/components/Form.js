@@ -12,21 +12,26 @@ class Customform extends React.Component {
       attendees: this.props.attendees || '',
       topicsDiscussed: this.props.topicsDiscussed || '',
       status: this.props.status || 'Open',
+      department: this.props.department || '',
+      location: this.props.location || '',
       action:this.props.action || '',
-      type:this.props.type || ''
+      type:this.props.type || '',
+      locationoptions:{
+        Marketing:['-- select --', 'LA','SD','SF','NY'],
+        Finance:['-- select --', 'LA','SD']
+      }
      }
   }
     // e here means event
   handleChange = e => {
-    console.log(e.target.value)
-    console.log(e.target.name)
+
     this.setState({
       [e.target.name]: e.target.value
     })
   }
 
   render (){
-    console.log(this.state)
+    const locopt = this.state.locationoptions[this.state.department]
     return(
       <Form onSubmit={e => this.props.onSubmit(e,this.state)}>
           {/* <Form.Row> */}
@@ -64,6 +69,28 @@ class Customform extends React.Component {
             </Form.Group>
           {/* </Form.Row> */}
 
+          <Form.Group>
+              <Form.Label>Department</Form.Label>
+              <Form.Control as="select" onChange={this.handleChange} name="department" value={this.state.department} > 
+              <option value="select">-- select --</option>
+                <option value="Marketing">Marketing</option>
+                <option value="Finance">Finance</option>
+              </Form.Control>
+            </Form.Group>
+
+            <Form.Group>
+              <Form.Label>Location</Form.Label>
+              <Form.Control as="select" onChange={this.handleChange} name="location" value={this.state.location} > 
+                {/* <option value="LA">LA</option>
+                <option value="SD">SD</option>
+                <option value="SF">SF</option>
+                <option value="NY">NY</option> */}
+             {locopt ? locopt.map((location, idx) => (
+               <option key={idx} value={location}>{location}</option>
+             )) : ""}
+              </Form.Control>
+            </Form.Group>
+
           {/* </Form.Row> */}
             <Form.Group>
               <Form.Label>Status</Form.Label>
@@ -73,6 +100,8 @@ class Customform extends React.Component {
               </Form.Control>
             </Form.Group>
           {/* </Form.Row> */}
+
+
 
 
           <Button variant="primary" type="submit">
