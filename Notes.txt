@@ -1,8 +1,19 @@
 source ref: https://github.com/manjeshpv/node-express-passport-mysql
+mySQL; Node; React; react Bootstrap
 
 working on:
+
+for 12/1/20
+
+- editing just use the hard coded items
+- only pull the dynamic departments when a new meeting is created; not for editing
+
+
+
+- finish get for departments
 - add new component for drop down edits called "dept"
 - create a table for drop downs
+- formating
 
 
 For some other time:

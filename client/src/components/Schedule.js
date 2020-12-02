@@ -36,10 +36,10 @@ class Schedule extends React.Component {
 
   componentDidMount(){
     this.isAuthenticated()
-  
+  // here next time; promise all maybe
     axios.get('/api/schedule')
     .then(res => {
-    console.log(res.data)
+    console.log(res)
       this.setState({
         schedule:res.data
       })

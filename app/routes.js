@@ -71,7 +71,7 @@ module.exports = function(app, passport) {
 		// if (err) return res.json({ err: true, msg: err.message });
     return res.json({ err: false, user: req.user });
 	});
-
+	
 	app.get('/api/schedule', (req,res)=> {
 		let results
 		connection.query(`SELECT  meeting_id, meeting_title, date_format(start_date, "%m/%d/%y") as start_date, start_time, attendees, topics_discussed, status, dept_name, loc_name FROM meetings`, (err, rows) => {
@@ -96,9 +96,44 @@ module.exports = function(app, passport) {
 		})
 	})
 
+	app.get('/api/deptlocation', (req,res)=> {
+		connection.query(`SELECT department, location FROM deptlocation`, (err, rows) => {
+			if (err) console.log(err)
+				let formatedrows=rows.reduce((result, record) => {
+					if(result[record.department]) {
+						result[record.department].push(record.location)
+					
+					}else{
+						result[record.department]=[record.location]
+					}
+					return result
+				},{})
+
+			res.send(formatedrows)
+
+		})
+	})
+
+
+
+	app.get('/api/departments', (req,res)=> {
+		let results
+		connection.query(`SELECT  id, label FROM department`, (err, rows) => {
+			if (err) console.log(err)
+				// let formatedrows=rows.map(record => {
+				// 	return {
+				// 		departmentId:record.id,
+				// 		departmentName:record.label
+				// 	}
+				// })
+			// res.send(formatedrows)
+			res.send(rows)
+			// results = rows
+		})
+	})
+
 	app.put('/api/edit', (req,res)=> {
-
-
+		
 		//changed to STR_TO_DATE, added ticks, put comma in! argh
 		connection.query(`
 			UPDATE meetings 
@@ -120,7 +155,7 @@ module.exports = function(app, passport) {
 	})
 
 	app.post('/api/add', (req,res)=> {
-
+		console.log(req.body)
 		//changed to STR_TO_DATE, added ticks, put comma in! argh
 		connection.query(`
 			INSERT INTO meetings (meeting_title, start_date, start_time, attendees, topics_discussed, status, dept_name, loc_name)

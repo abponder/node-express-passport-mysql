@@ -1,5 +1,6 @@
 import React from 'react';
 import {Form, Col, Button} from 'react-bootstrap/'
+import axios from "axios";
 
 class Customform extends React.Component {
   constructor(props) {
@@ -32,6 +33,7 @@ class Customform extends React.Component {
 
   render (){
     const locopt = this.state.locationoptions[this.state.department]
+    console.log('department', this.state.department)
     return(
       <Form onSubmit={e => this.props.onSubmit(e,this.state)}>
           {/* <Form.Row> */}

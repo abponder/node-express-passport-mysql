@@ -17,7 +17,6 @@ class Reports extends React.Component{
     
     axios.get('/api/welcome', { withCredentials: true })
     .then(res => {
-      console.log('api welcome res;', res)
       
       if(res.data.user) { 
         this.setState({
