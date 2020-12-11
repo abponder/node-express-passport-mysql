@@ -17,12 +17,26 @@ class Customform extends React.Component {
       location: this.props.location || '',
       action:this.props.action || '',
       type:this.props.type || '',
-      locationoptions:{
-        Marketing:['-- select --', 'LA','SD','SF','NY'],
-        Finance:['-- select --', 'LA','SD']
-      }
+      locationoptions:{}
      }
   }
+
+  componentDidMount(){
+  // here next time; promise all maybe
+  //'-- select --'
+    axios.get('/api/deptlocation')
+    .then(res => {
+    let options = res.data
+    for(const prop in options){
+      options[prop].unshift('-- select --')
+    }
+      this.setState({
+        //locationoptions:res.data
+        locationoptions:options
+      })
+    })
+  }
+
     // e here means event
   handleChange = e => {
 
@@ -33,7 +47,7 @@ class Customform extends React.Component {
 
   render (){
     const locopt = this.state.locationoptions[this.state.department]
-    console.log('department', this.state.department)
+    const depts = Object.keys(this.state.locationoptions)
     return(
       <Form onSubmit={e => this.props.onSubmit(e,this.state)}>
           {/* <Form.Row> */}
@@ -74,9 +88,12 @@ class Customform extends React.Component {
           <Form.Group>
               <Form.Label>Department</Form.Label>
               <Form.Control as="select" onChange={this.handleChange} name="department" value={this.state.department} > 
-              <option value="select">-- select --</option>
+              {/* <option value="select">-- select --</option>
                 <option value="Marketing">Marketing</option>
-                <option value="Finance">Finance</option>
+                <option value="Finance">Finance</option> */}
+              {depts.length ? depts.map((dept, idx) => (
+               <option key={idx} value={dept}>{dept}</option>
+             )) : ""}
               </Form.Control>
             </Form.Group>
 

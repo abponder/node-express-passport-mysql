@@ -39,7 +39,6 @@ class Schedule extends React.Component {
   // here next time; promise all maybe
     axios.get('/api/schedule')
     .then(res => {
-    console.log(res)
       this.setState({
         schedule:res.data
       })
@@ -106,7 +105,6 @@ class Schedule extends React.Component {
     .then(res => {
       data.startDate = data.startDate.slice(5,7) + '/' + data.startDate.slice(-2) + '/' + data.startDate.slice(0,2)
     let updatedSchedule = this.state.schedule.slice()
-    console.log(updatedSchedule)
     let updatedmeeting = false
     for (let i =0; i<updatedSchedule.length; i++){
       if(updatedSchedule[i].meetingId===data.meetingId){

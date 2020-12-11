@@ -155,7 +155,6 @@ module.exports = function(app, passport) {
 	})
 
 	app.post('/api/add', (req,res)=> {
-		console.log(req.body)
 		//changed to STR_TO_DATE, added ticks, put comma in! argh
 		connection.query(`
 			INSERT INTO meetings (meeting_title, start_date, start_time, attendees, topics_discussed, status, dept_name, loc_name)
