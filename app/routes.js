@@ -10,23 +10,6 @@ connection.query('USE ' + process.env.database);
 // app/routes.js
 module.exports = function(app, passport) {
 
-	// =====================================
-	// HOME PAGE (with login links) ========
-	// =====================================
-	app.get('/', function(req, res) {
-		res.render('index.ejs'); // load the index.ejs file
-	});
-
-	// =====================================
-	// LOGIN ===============================
-	// =====================================
-	// show the login form
-	app.get('/login', function(req, res) {
-
-		// render the page and pass in any flash data if it exists
-		res.render('login.ejs', { message: req.flash('loginMessage') });
-	});
-
   // process the login form
   app.post('/api/login', (req, res, next) => {
     passport.authenticate('local-login', (err, user, info) => {
@@ -40,15 +23,6 @@ module.exports = function(app, passport) {
       });
     })(req, res, next);
   });
-
-	// =====================================
-	// SIGNUP ==============================
-	// =====================================
-	// show the signup form
-	app.get('/signup', function(req, res) {
-		// render the page and pass in any flash data if it exists
-		res.render('signup.ejs', { message: req.flash('signupMessage') });
-	});
 
   // process the signup form
   app.post('/api/signup', (req, res, next) => {
